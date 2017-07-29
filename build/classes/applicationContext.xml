@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 使用Annotation的时候要用不一样的SessionFactory -->
+	<!--数据库连接 -->	
+	<bean id="HibernateSessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+	</bean>
+	<bean id="HibernateDaoSupport" abstract="true" class="org.springframework.orm.hibernate3.support.HibernateDaoSupport">
+		<property name="sessionFactory" ref="HibernateSessionFactory"></property>
+	</bean>
+	<!-- 数据库连接（事务配置，不配置事务数据更改不会提交到数据库） -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager" >
+		<property name="sessionFactory" ref="HibernateSessionFactory"></property>
+	</bean>
+	
+	<tx:advice id="defaultTransactionAdvice" transaction-manager="transactionManager" >
+	<tx:attributes>
+		<tx:method name="*" propagation="REQUIRED"/>
+	</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="allService" expression="execution(* service..*.*(..))" />
+		<aop:advisor advice-ref="defaultTransactionAdvice" pointcut-ref="allService"/>
+	</aop:config>
+	
+	<!-- BaseDao -->
+	<bean id="BaseDao" class="com.dao.BaseDaoImpl" parent="HibernateDaoSupport">
+	</bean>
+	<!-- BaseService -->
+	<bean id="BaseService" class="com.service.BaseServiceImpl">
+		<property name="baseDao" ref="BaseDao"></property>
+	</bean>
+	
+	<!-- Video -->
+	<!-- Add -->
+	<bean id="VideoAddAction" class="com.action.VideoAdd">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	<!-- Delete -->
+	<bean id="VideoDeleteAction" class="com.action.VideoDelete">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	<!-- Update -->
+	<bean id="VideoUpdateAction" class="com.action.VideoUpdate">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	<!-- Read All -->
+	<bean id="VideoReadAllAction" class="com.action.VideoReadAll">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	<!-- Read By ID -->
+	<bean id="VideoReadByIDAction" class="com.action.VideoReadbyID">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	<!-- VideoReadLimitedByOrderAction -->
+	<bean id="VideoReadLimitedByOrderAction" class="com.action.VideoReadLimitedByOrder">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	
+	<!-- Index -->
+	<bean id="IndexAction" class="com.action.Index">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	
+	<bean id="ConfigureUpdateAction" class="com.action.ConfigureUpdate">
+		<property name="baseService" ref="BaseService"></property>
+	</bean>
+	
+	
+	
+</beans>

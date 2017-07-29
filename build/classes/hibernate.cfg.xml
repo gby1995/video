@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+	<session-factory>
+		<property name="dialect">
+			org.hibernate.dialect.MySQLDialect
+		</property>
+		<property name="connection.url">
+			jdbc:mysql://localhost:3306/svw
+		</property>
+		<property name="connection.username">root</property>
+		<property name="connection.password">gby19951218</property>
+		<property name="connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+		<mapping class="com.bean.Video" />
+		<mapping class="com.bean.Category" />
+		<mapping class="com.bean.Videostate" />
+		<mapping class="com.bean.Configure" />
+
+	</session-factory>
+
+</hibernate-configuration>

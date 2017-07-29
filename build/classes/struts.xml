@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.custom.i18n.resources" value="message"/> 
+	<include file="struts-default.xml"/>
+
+	
+    <package name="Video" namespace="/" extends="struts-default">
+		
+		
+		<action name="ConfigureUpdateRead" class="ConfigureUpdateAction" method="Read">
+    		<result name="success">/configure.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<action name="ConfigureUpdateUpdate" class="ConfigureUpdateAction" method="Update">
+    		<result name="success" type="redirectAction">ConfigureUpdateRead</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	
+		
+		<action name="SidebarRecent" class="VideoReadLimitedByOrderAction">
+    		<result name="success">/csidebar_recent.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<action name="IndexRecentAdd" class="VideoReadLimitedByOrderAction">
+    		<result name="success">/index_recent.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+		
+		<!--Index-->
+    	<action name="Index" class="IndexAction">
+    		<result name="success">/index.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<!-- About-->
+    	<action name="About">
+    		<result type="dispatcher">/about.jsp</result>
+    	</action>
+		
+		<!-- 添加-->
+    	<action name="VideoAddPage">
+    		<result type="dispatcher">/videoedit.jsp</result>
+    	</action>
+    	<action name="VideoAdd" class="VideoAddAction">
+    		<result name="success" type="redirectAction">VideoReadAll</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<!-- 删除 -->
+    	<action name="VideoDelete" class="VideoDeleteAction">
+    		<result name="success" type="redirectAction">VideoReadAll</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<!-- 修改 -->
+    	<action name="VideoUpdateRead" class="VideoUpdateAction" method="Read">
+    		<result name="success">/videoedit.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<action name="VideoUpdateUpdate" class="VideoUpdateAction" method="Update">
+    		<result name="success" type="redirectAction">VideoReadAll</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+		<!-- Read By ID -->
+    	<action name="VideoReadByID" class="VideoReadByIDAction">
+    		<result name="success">/videocontent.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    	<!-- 列表读取所有 -->
+    	<action name="VideoReadAll" class="VideoReadAllAction">
+    		<result name="success">/videolist1.jsp</result>
+    		<result name="error">/error.jsp</result>
+    	</action>
+    </package>
+</struts>
